@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.basepom</groupId>
+    <artifactId>basepom-minimal</artifactId>
+    <version>25</version>
+  </parent>
+
+  <groupId>com.zbiljic</groupId>
+  <artifactId>baseagent</artifactId>
+  <version>0.2.0-SNAPSHOT</version>
+
+  <name>baseagent</name>
+  <description>
+    Base Agent is a Java library that makes it easier to write instrumentation for Java classes.
+  </description>
+  <url>https://github.com/zbiljic/baseagent</url>
+
+  <inceptionYear>2018</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>zbiljic</id>
+      <name>Nemanja Zbiljić</name>
+      <timezone>+1</timezone>
+      <url>https://github.com/zbiljic</url>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:zbiljic/baseagent.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/zbiljic/baseagent.git</developerConnection>
+    <url>https://github.com/zbiljic/baseagent</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>http://github.com/zbiljic/baseagent/issues</url>
+  </issueManagement>
+
+  <properties>
+    <!-- Project options -->
+    <project.build.targetJdk>1.6</project.build.targetJdk>
+    <basepom.javadoc.skip>false</basepom.javadoc.skip>
+    <!-- Dependencies -->
+    <dep.byte-buddy.version>1.7.10</dep.byte-buddy.version>
+    <dep.junit.version>4.12</dep.junit.version>
+  </properties>
+
+  <dependencies>
+
+    <!-- Byte buddy -->
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy</artifactId>
+      <version>${dep.byte-buddy.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy-agent</artifactId>
+      <version>${dep.byte-buddy.version}</version>
+    </dependency>
+
+    <!-- Testing -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${dep.junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive combine.self="override">
+            <manifest>
+              <addClasspath>false</addClasspath>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+            <manifestSections>
+              <manifestSection>
+                <name>${project.groupId}:${project.artifactId}</name>
+                <manifestEntries>
+                  <!-- project information -->
+                  <Project-ArtifactId>${project.artifactId}</Project-ArtifactId>
+                  <Project-GroupId>${project.groupId}</Project-GroupId>
+                  <Project-Name>${project.name}</Project-Name>
+                  <Project-Version>${project.version}</Project-Version>
+                </manifestEntries>
+              </manifestSection>
+            </manifestSections>
+          </archive>
+        </configuration>
+        <executions>
+          <!-- Disable building test jar -->
+          <execution>
+            <id>attach-tests</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <!-- Disable building test-sources jar -->
+          <execution>
+            <id>attach-sources</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>attach-jar-sources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- Fallback for Java 6 build to use older, compatible versions of plugins. -->
+    <profile>
+      <id>java6</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <jdk>1.6</jdk>
+      </activation>
+      <properties>
+        <basepom.check.skip-findbugs>true</basepom.check.skip-findbugs>
+        <basepom.check.skip-pmd>true</basepom.check.skip-pmd>
+        <basepom.check.skip-checkstyle>true</basepom.check.skip-checkstyle>
+        <dep.plugin.compiler.version>3.6.2</dep.plugin.compiler.version>
+      </properties>
+    </profile>
+    <!-- Runs the build with a target version for Java 7 -->
+    <profile>
+      <id>java7</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <project.build.targetJdk>1.7</project.build.targetJdk>
+      </properties>
+    </profile>
+    <!-- Runs the build with a target version for Java 8 -->
+    <profile>
+      <id>java8</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <project.build.targetJdk>1.8</project.build.targetJdk>
+      </properties>
+    </profile>
+    <!-- Runs the build with a target version for Java 9 -->
+    <profile>
+      <id>java9</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <project.build.targetJdk>9</project.build.targetJdk>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>

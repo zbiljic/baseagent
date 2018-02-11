@@ -1,0 +1,3 @@
+com.zbiljic.baseagent.instrumentation.TestInstrumentation
+com.zbiljic.baseagent.instrumentation.TestExceptionInstrumentation
+com.zbiljic.baseagent.instrument.FileExportingListenerTest$ExportMeInstrumentation
