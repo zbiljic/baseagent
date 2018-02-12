@@ -14,7 +14,7 @@
 
   <name>baseagent</name>
   <description>
-    Base Agent is a Java library that makes it easier to write instrumentation for Java classes.
+    Base Agent framework makes it easy to write instrumentation for Java classes.
   </description>
   <url>https://github.com/zbiljic/baseagent</url>
 
