@@ -54,6 +54,7 @@
     <!-- Project options -->
     <project.build.targetJdk>1.6</project.build.targetJdk>
     <basepom.javadoc.skip>false</basepom.javadoc.skip>
+    <basepom.maven.version>3.2.5</basepom.maven.version>
     <!-- Dependencies -->
     <dep.byte-buddy.version>1.7.10</dep.byte-buddy.version>
     <dep.junit.version>4.12</dep.junit.version>
